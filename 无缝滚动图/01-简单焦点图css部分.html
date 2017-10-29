@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			
+			*{
+				padding: 0px;
+				margin: 0px;
+			}
+			.box {
+				width:500px;
+				height: 200px;
+				position: relative;
+				margin: 100px auto;
+			}
+			
+			.ad {
+				width: 500px;
+				height: 200px;
+				position:absolute;
+				overflow: hidden;/*overfolw和定位一起用*/
+			}
+			
+			ul {
+				list-style: none;
+				width: 600%;/*注意！！！！此时有6张图片，所以改成600%*/
+				height: 200px;
+				position: absolute;/*要移动，所以得定位*/
+			}
+			
+			.ad li {
+				float:left;
+				
+			}
+			
+			#left {
+				display: block;
+				width: 50px;
+				height: 50px;
+				background: #CCCCCC;
+				opacity: 0.6;
+				top: 50%;
+				margin-top: -25px;
+				left:0px;
+				position: absolute;
+				text-align:center;
+				font: 700 30px/50px "微软雅黑";
+				display: none;
+			}
+			
+			
+			#rigth {
+				display: block;
+				width: 50px;
+				height: 50px;
+				background: #CCCCCC;
+				opacity: 0.6;
+				top: 50%;
+				margin-top: -25px;
+				right:0px;
+				position: absolute;
+				text-align:center;
+				font: 700 30px/50px "微软雅黑";
+				display: none;
+			}
+			
+			.screen {
+				position:absolute;
+				bottom: 10px;
+				right: 10px;
+				
+				
+			}
+			
+			.screen li {
+				margin-right: 10px;
+				display: block;
+				width: 20px;
+				height: 20px;
+				background-color: white;
+				text-align: center;
+				font: 600 16px/20px "simsun";
+			}
+			
+			.screen .current {/*继承了之前的白色，所以一直显示不出来橙色，此时找到他爸爸的爸爸即可*/
+				background-color: orange;
+			}
+			
+		</style>
+	</head>
+	<body>
+		<div class="box" id="all">
+			<div class="ad">
+				<ul>
+					<li><img src="images/1.jpg"></li>
+					<li><img src="images/2.jpg"></li>
+					<li><img src="images/3.jpg"></li>
+					<li><img src="images/4.jpg"></li>
+					<li><img src="images/5.jpg"></li>
+				</ul>
+				<ol class="screen">
+					
+				</ol>
+			</div>
+			<div class="arr">
+				<span id="left"><</span>
+				<span id="rigth">></span>
+			</div>
+			
+		</div>
+		
+		<script>
+			//1.获取事件源和相关元素
+			
+			var all=document.getElementById("all");
+			var ad=all.children[0];
+			var ul=ad.children[0];
+			var arr=ad.children[1];
+			var ol=ad.children[1];
+			var spanArr=arr.children;
+			var imgWidth=ad.offsetWidth;
+			
+			//2.复制第一张图片所在的li,添加到ul的最后面
+			
+			var ulNewLi=ul.children[0].cloneNode(true);//深层复制
+			ul.appendChild(ulNewLi);
+			
+			//3.给ol中添加li,个数为ul中的个数减一个，并点亮第一个按钮
+			
+			for(var i=0;i<ul.children.length-1;i++){
+				var olNewLi=document.createElement("li");/*创建新的节点！！！不要忘了*/
+				olNewLi.innerHTML=i+1;
+				ol.appendChild(olNewLi);
+			}
+			
+			var olLiArr=ol.children;
+			olLiArr[0].className="current";
+		
+		</script>
+		
+		
+		
+	</body>
+</html>

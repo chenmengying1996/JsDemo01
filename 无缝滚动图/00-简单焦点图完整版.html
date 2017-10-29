@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			
+			*{
+				padding: 0px;
+				margin: 0px;
+			}
+			.box {
+				width:500px;
+				height: 200px;
+				position: relative;
+				margin: 100px auto;
+			}
+			
+			.ad {
+				width: 500px;
+				height: 200px;
+				position:absolute;
+				overflow: hidden;/*overfolw和定位一起用*/
+			}
+			
+			ul {
+				list-style: none;
+				width: 600%;/*注意！！！！此时有6张图片，所以改成600%*/
+				height: 200px;
+				position: absolute;/*要移动，所以得定位*/
+			}
+			
+			.ad li {
+				float:left;
+				
+			}
+			
+			#left {
+				display: block;
+				width: 50px;
+				height: 50px;
+				background: #CCCCCC;
+				opacity: 0.6;
+				top: 50%;
+				margin-top: -25px;
+				left:0px;
+				position: absolute;
+				text-align:center;
+				font: 700 30px/50px "微软雅黑";
+				/*display: none;*/
+			}
+			
+			
+			.arr {
+				display: none;
+				cursor: pointer;
+			}
+			
+			#rigth {
+				display: block;
+				width: 50px;
+				height: 50px;
+				background: #CCCCCC;
+				opacity: 0.6;
+				top: 50%;
+				margin-top: -25px;
+				right:0px;
+				position: absolute;
+				text-align:center;
+				font: 700 30px/50px "微软雅黑";
+				/*display: none;*/
+			}
+			
+			.screen {
+				position:absolute;
+				bottom: 10px;
+				right: 10px;
+				
+				
+			}
+			
+			.screen li {
+				margin-right: 10px;
+				display: block;
+				width: 20px;
+				height: 20px;
+				background-color: white;
+				text-align: center;
+				font: 600 16px/20px "simsun";
+			}
+			
+			.screen .current {/*继承了之前的白色，所以一直显示不出来橙色，此时找到他爸爸的爸爸即可*/
+				background-color: orange;
+			}
+			
+		</style>
+	</head>
+	<body>
+		<div class="box" id="all">
+			<div class="ad">
+				<ul>
+					<li><img src="images/1.jpg"></li>
+					<li><img src="images/2.jpg"></li>
+					<li><img src="images/3.jpg"></li>
+					<li><img src="images/4.jpg"></li>
+					<li><img src="images/5.jpg"></li>
+				</ul>
+				<ol class="screen">
+					
+				</ol>
+			</div>
+			<div class="arr">
+				<span id="left"><</span>
+				<span id="rigth">></span>
+			</div>
+			
+		</div>
+		
+		<script>
+			
+			//需求：小方块被点亮的同时，图片对应的滑动。
+			//！！！！！类似于滑动轮播图！！！！
+			//！！！！！类似于滑动轮播图！！！！
+			//！！！！！类似于滑动轮播图！！！！
+			
+			
+			//1.获取事件源和相关元素
+			
+			var all=document.getElementById("all");
+			var ad=all.children[0];
+			var ul=ad.children[0];
+			var arr=all.children[1];
+			var ol=ad.children[1];
+			var spanArr=arr.children;
+			var imgWidth=ad.offsetWidth;
+			
+			//2.复制第一张图片所在的li,添加到ul的最后面
+			
+			var ulNewLi=ul.children[0].cloneNode(true);//深层复制
+			ul.appendChild(ulNewLi);
+			
+			//3.给ol中添加li,个数为ul中的个数减一个，并点亮第一个按钮
+			
+			for(var i=0;i<ul.children.length-1;i++){
+				var olNewLi=document.createElement("li");/*创建新的节点！！！不要忘了*/
+				olNewLi.innerHTML=i+1;
+				ol.appendChild(olNewLi);
+			}
+			
+			var olLiArr=ol.children;
+			olLiArr[0].className="current";
+			
+			
+			//4.鼠标放在ol的li上切换图片
+			
+		    	for(var i=0;i<olLiArr.length;i++){
+				//!!!!!!重要
+				olLiArr[i].index=i;
+				
+				olLiArr[i].onmouseover=function (){
+					
+					//点亮盒子，排他思想
+					for(var j=0;j<olLiArr.length;j++){
+						olLiArr[j].className="";
+					}
+					this.className="current";
+					
+					//修改BUG1!!!
+					//修改BUG1!!!
+					//修改BUG1！！！
+					//鼠标放到小的方块上的时候，索引值和key以及square同步
+					//key=this.index;
+					//square=this.index;
+					key=square=this.index;
+					
+					
+				//移动盒子
+					animate(ul,-this.index*imgWidth);
+				}
+			}
+
+		
+		
+		        
+		
+		
+		
+		
+			var timer=null;
+			 function animate(ele,target){
+                clearInterval(ele.timer);
+                var speed = target>ele.offsetLeft?10:-10;
+                ele.timer = setInterval(function () {
+                    var val = target - ele.offsetLeft;
+                    ele.style.left = ele.offsetLeft + speed + "px";
+                    if(Math.abs(val)<Math.abs(speed)){
+                        ele.style.left = target + "px";
+                        clearInterval(ele.timer);
+                    }
+                },10)
+            }
+
+
+
+        //5.自动播放 
+        var timer=setInterval(autoPlay,1000);
+        
+        //固定向右切换图片
+        //设置两个定时器（一个记录小方块，一个记录图片）即图片和小方块同时自动播放
+        
+        var key=0;
+        var square=0;
+        function autoPlay(){
+        		key++;
+        		if(key>olLiArr.length){//图片滑到最后一张，然后跳转到第一张，然后滑动第二张
+        			ul.style.left=0;
+        			key=1;
+        		}
+        		animate(ul,-key*imgWidth);
+        		
+        		square++;
+        		if(square>olLiArr.length-1){
+        			square=0;
+        		}
+        		for(var i=0;i<olLiArr.length;i++){
+        			olLiArr[i].className="";
+        			
+        		}
+        		olLiArr[square].className="current";
+        }
+        
+        
+        all.onmouseover=function (){
+        	arr.style.display="block";
+        	clearInterval(timer);
+        }
+        
+        
+        all.onmouseout=function (){
+        	arr.style.display="none";
+        	timer=setInterval(autoPlay,1000);
+        }
+        
+        
+        //此时仍有BUG1,当轮播图滑到第三张，然后鼠标放到轮播图上时，图暂停，然后鼠标移动到数字1上时，数字1被点亮，按理
+        //接下来从第2张图开始放，结果仍从第4张开始，原理是鼠标放到小的方块上时，索引值未能和key和square同步
+        
+        
+        //6.左右切换图片
+        
+        spanArr[0].onclick=function (){//相比较右侧，是把++都换成--，如果只是单纯的这样换，那么图片走到第一张的时候再按左边的按钮则会出现空白图片，则需要判断
+        	key--;
+        		if(key<0){//当图片滑动到第一张的时候，再按左边按扭，即key值小于0的时候，跳转到图片5，然而此时并不是显示倒数第一张，因为倒数第一张是图片1，所以是显示倒数第二张
+        			      //此时图片需要向前移动4张，可以画图验证
+        			      
+        			    ul.style.left=-imgWidth*(olLiArr.length-1)+"px";
+        			    key=olLiArr.length-1;//因为到对应之前的key=square=this.index
+        		}
+        		animate(ul,-key*imgWidth);
+        		
+        		square--;
+        		if(square<0){
+        			square=olLiArr.length-1;//此时当小方块盒子点亮1时，再按左边的按钮，会跳转到点亮5
+        		}
+        		for(var i=0;i<olLiArr.length;i++){
+        			olLiArr[i].className="";
+        			
+        		}
+        		olLiArr[square].className="current";
+        }
+        
+        //右侧比较容易做，和定时器一模一样(这个定时器指的是自动播放的定时器)
+        //区别在于定时器一秒钟执行一次，这个是点一次执行一次
+        spanArr[1].onclick=function (){
+        	autoPlay();
+        }
+		
+		</script>
+		
+		
+		
+	</body>
+</html>

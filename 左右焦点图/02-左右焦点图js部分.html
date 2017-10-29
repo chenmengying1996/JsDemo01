@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			
+			*{
+				padding: 0px;
+				margin: 0px;
+			}
+			
+			#box {
+					width: 520px;
+					height: 280px;
+					position: relative;
+					margin: 100px auto;
+					cursor: pointer;
+			}
+			
+			.ad {
+				width: 520px;
+				height: 280px;
+				overflow: hidden;
+				position: relative;
+			}
+			
+			ul {
+				width: 500%;
+				height: 280px;
+				list-style: none;
+				position: absolute;
+			}
+			
+			li {
+				float: left;
+			}
+			
+			#left {
+				display: block;
+				position: absolute;
+				width: 50px;
+				height: 50px;
+				background-color: #CCCCCC;
+				opacity: 0.6;
+				color: #FFFFFF;
+				left: 10px;
+				top: 50%;
+				margin-top: -25px;
+				text-align: center;
+				font: 500 30px/50px "微软雅黑";
+				/*display: none;*/
+			}
+			
+			#rigth {
+				display: block;
+				position: absolute;
+				width: 50px;
+				height: 50px;
+				background-color: #CCCCCC;
+				opacity: 0.6;
+				color: #FFFFFF;
+				right: 10px;
+				top: 50%;
+				margin-top: -25px;
+				text-align: center;
+				font: 500 30px/50px "微软雅黑";
+			/*	display: none;*/
+			}
+			
+		</style>
+		
+	</head>
+	<body>
+		
+		<div class="all" id="box">
+			<div class="ad">
+				<ul>
+					<li><img src="../../img/1.jpg"></li>
+					<li><img src="../../img/2.jpg"></li>
+					<li><img src="../../img/3.jpg"></li>
+					<li><img src="../../img/4.jpg"></li>
+					<li><img src="../../img/5.jpg"></li>
+				</ul>
+				
+			</div>
+			<div class="arr">
+				<span id="left"><</span>
+				<span id="rigth">></span>
+			</div>
+		</div>
+		
+		<script>
+			
+			//需求：鼠标放在盒子上，显示左右切换的图片，点击按钮，图片(ul)向右移动，相反的按钮向左移动
+			
+			//思路：获取两个按钮，点击左侧按钮，移动ul向右走（每次只走一张）
+			
+			//如何移动盒子，利用计数器模拟index值，计数器从0开始，点击右侧自增，点击左侧自减
+			
+			//鼠标放上去，span显示
+			
+			var box=document.getElementById("box");
+			var imgWidth=box.children[0].offsetWidth;
+			var boxLeftRight=box.children[1];
+			var btnArr=boxLeftRight.children;
+			var ul=box.children[0].children[0];
+			
+			box.onmouseover=function (){
+				boxLeftRight.style.display="block";
+			}
+			
+			box.onmouseout=function (){
+				boxLeftRight.style.display="none";
+			}
+			
+			
+			//2.点击右侧盒子，图片向左移动，并用计数器模拟index的值
+			
+			//定义计数器
+			
+			//！！！！！重要
+			//！！！！！重要
+			//！！！！！重要
+			
+			var index=0;
+			
+			btnArr[1].onclick=function (){
+				
+				//！！！！重要
+				//！！！！重要
+				//！！！1重要
+				index++;
+//				console.log(index);
+                if(index>ul.children.length-1){
+                	index=ul.children.length-1;
+                	alert("到头了！");
+                }
+				animate(ul,-index*imgWidth);
+				
+			}
+			
+			
+			
+			//2.点击左侧盒子，图片向右移动，并用计数器模拟index的值
+			
+			btnArr[0].onclick=function (){
+				index--;
+				if(index<0){
+					index=0;
+					alert("到头了！")
+				}
+				animate(ul,-index*imgWidth);
+			}
+			
+			//此时有BUG，当图片滑到最后一张，再按按钮，会出现空白，所以得对index的值做约束
+			
+			var timer=null;
+			
+			function animate(ele,target){
+				
+				clearInterval(ele.timer);
+				var speed=target>ele.offsetLeft?10:-10;
+				ele.timer=setInterval(function(){
+					var val=target-ele.offsetLeft;
+					ele.style.left=ele.offsetLeft+speed+"px";
+					if(Math.abs(val)<Math.abs(speed)){
+						ele.style.left=target+"px";
+						clearInterval(ele.timer);
+					}
+				},10);
+			}
+		</script>
+		
+		
+	</body>
+</html>
+

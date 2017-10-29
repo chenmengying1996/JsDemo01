@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			
+			*{
+				padding: 0px;
+				margin: 0px;
+			}
+			
+			#box {
+					width: 520px;
+					height: 280px;
+					position: relative;
+					margin: 100px auto;
+			}
+			
+			.ad {
+				width: 520px;
+				height: 280px;
+				overflow: hidden;
+				
+				/*overflow:hidden并不是万能的，要想彻底剪裁它的所有子元素，它不但要有overflow:hidden，而且还要作为所有子元素的包含块(position定位)。
+				 * 这样万一某一天你看到overflow:hidden里面的东东居然被显示出来了，你才知道是为什么。*/
+				/*这就是ad要被定位的原因*/
+				position: relative;
+			}
+			
+			ul {
+				width: 500%;
+				height: 280px;
+				list-style: none;
+				position: absolute;
+			}
+			
+			li {
+				float: left;
+			}
+			
+			#left {
+				display: block;
+				position: absolute;
+				width: 50px;
+				height: 50px;
+				background-color: #CCCCCC;
+				opacity: 0.6;
+				color: #FFFFFF;
+				left: 10px;
+				top: 50%;
+				margin-top: -25px;
+				text-align: center;
+				font: 500 30px/50px "微软雅黑";
+				/*display: none;*/
+			}
+			
+			#rigth {
+				display: block;
+				position: absolute;
+				width: 50px;
+				height: 50px;
+				background-color: #CCCCCC;
+				opacity: 0.6;
+				color: #FFFFFF;
+				right: 10px;
+				top: 50%;
+				margin-top: -25px;
+				text-align: center;
+				font: 500 30px/50px "微软雅黑";
+			/*	display: none;*/
+			}
+			
+		</style>
+		
+	</head>
+	<body>
+		
+		<div class="all" id="box">
+			<div class="ad">
+				<ul>
+					<li><img src="../../img/1.jpg"></li>
+					<li><img src="../../img/2.jpg"></li>
+					<li><img src="../../img/3.jpg"></li>
+					<li><img src="../../img/4.jpg"></li>
+					<li><img src="../../img/5.jpg"></li>
+				</ul>
+				
+			</div>
+			<div class="arr">
+				<span id="left"><</span>
+				<span id="rigth">></span>
+			</div>
+		</div>
+		
+		
+		
+		
+	</body>
+</html>
